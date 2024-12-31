@@ -217,7 +217,7 @@ button:hover {
   );
 }
 
-.footer {
+footer {
   text-align: center;
   margin-top: 3rem;
   padding: 2rem 0;
@@ -229,7 +229,11 @@ button:hover {
   background: white;
 }
 
-.footer a {
+footer p {
+  text-align: center;
+}
+
+footer a {
   color: var(--primary);
   text-decoration: none;
   font-weight: 500;
