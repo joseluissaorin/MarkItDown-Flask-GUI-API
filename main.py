@@ -20,7 +20,7 @@ def convert():
     if not files or files[0].filename == '':
         return jsonify({'error': 'No file selected'}), 400
 
-    def generate():
+    def generate(files):
         results = []
         temp_dir = tempfile.mkdtemp()
         
@@ -65,7 +65,7 @@ def convert():
             if os.path.exists(temp_dir):
                 os.rmdir(temp_dir)
                 
-    return app.response_class(generate(), mimetype='application/json')
+    return app.response_class(generate(files), mimetype='application/json')
 
 @app.route('/api/convert', methods=['POST'])
 def api_convert():
