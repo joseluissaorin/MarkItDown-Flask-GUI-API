@@ -152,9 +152,16 @@ button:hover {
   margin-top: 2rem;
 }
 
-.conversion-history h2 {
-  color: var(--primary);
+.conversion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1rem;
+}
+
+.conversion-header h2 {
+  color: var(--primary);
+  margin: 0;
 }
 
 .history-item {

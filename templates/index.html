@@ -33,7 +33,10 @@
             </form>
         </div>
         <div class="conversion-history" style="display: none;" id="conversion-history">
-            <h2>Recent Conversions</h2>
+            <div class="conversion-header">
+                <h2>Recent Conversions</h2>
+                <div id="zip-button-container"></div>
+            </div>
             <div id="history-list"></div>
         </div>
         <div class="supported-formats">
@@ -51,7 +54,10 @@
             </ul>
         </div>
         <div class="conversion-history" style="display: none;" id="conversion-history">
-            <h2>Recent Conversions</h2>
+            <div class="conversion-header">
+                <h2>Recent Conversions</h2>
+                <div id="zip-button-container"></div>
+            </div>
             <div id="history-list"></div>
         </div>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -143,7 +149,7 @@
                         link.download = 'converted_files.zip';
                         link.click();
                     };
-                    historyList.insertBefore(zipButton, historyList.firstChild);
+                    document.getElementById('zip-button-container').appendChild(zipButton);
                 }
                 document.getElementById('conversion-history').style.display = 'block';
             } catch (error) {
