@@ -100,7 +100,11 @@
 
         fileInput.addEventListener('change', () => handleSubmit());
 
-        async function handleSubmit() {
+        function handleSubmit() {
+            submitForm().catch(console.error);
+        }
+
+        async function submitForm() {
             const files = fileInput.files;
             if (!files.length) return;
 

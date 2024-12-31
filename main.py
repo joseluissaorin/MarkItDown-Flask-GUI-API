@@ -26,11 +26,11 @@ def convert():
         
         try:
             for file in files:
+                if not file.filename:
+                    continue
                 temp_path = os.path.join(temp_dir, file.filename)
                 try:
-                    file_content = file.read()
-                    with open(temp_path, 'wb') as f:
-                        f.write(file_content)
+                    file.save(temp_path)
                 except (ValueError, IOError) as e:
                     print(f"Error saving {file.filename}: {str(e)}")
                     continue
