@@ -92,9 +92,15 @@
         fileInput.addEventListener('change', () => handleSubmit());
 
         async function handleSubmit() {
-            progress.style.display = 'block';
-            const formData = new FormData(form);
+            const files = fileInput.files;
+            if (!files.length) return;
+
+            progress.style.display = 'flex';
+            progress.style.justifyContent = 'center';
+            progress.style.alignItems = 'center';
+            document.querySelector('.progress-filename').textContent = `Processing ${files[0].name}...`;
             
+            const formData = new FormData(form);
             try {
                 const response = await fetch('/convert', {
                     method: 'POST',
@@ -102,7 +108,7 @@
                 });
 
                 const blob = await response.blob();
-                const filename = response.headers.get('Content-Disposition').split('filename=')[1].replace(/"/g, '');
+                const filename = 'converted_files.zip';
                 
                 const historyItem = document.createElement('div');
                 historyItem.className = 'history-item';

@@ -43,13 +43,19 @@ def convert():
                 print(f"Error converting {file.filename}: {str(e)}")
                 continue
 
-        # Return the first converted file for now
         if results:
+            # Create a zip file containing all converted files
+            zip_path = os.path.join(temp_dir, 'converted_files.zip')
+            import zipfile
+            with zipfile.ZipFile(zip_path, 'w') as zipf:
+                for result in results:
+                    zipf.write(result['path'], result['filename'])
+            
             return send_file(
-                results[0]['path'],
-                mimetype='text/markdown',
+                zip_path,
+                mimetype='application/zip',
                 as_attachment=True,
-                download_name=results[0]['filename']
+                download_name='converted_files.zip'
             )
         return jsonify({'error': 'No files were converted successfully'}), 500
     except Exception as e:
