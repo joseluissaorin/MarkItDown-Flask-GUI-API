@@ -30,7 +30,10 @@ def convert():
                     continue
                 temp_path = os.path.join(temp_dir, file.filename)
                 try:
-                    file.save(temp_path)
+                    # Copy the file content to a temporary file
+                    file_content = file.stream.read()
+                    with open(temp_path, 'wb') as f:
+                        f.write(file_content)
                 except (ValueError, IOError) as e:
                     print(f"Error saving {file.filename}: {str(e)}")
                     continue

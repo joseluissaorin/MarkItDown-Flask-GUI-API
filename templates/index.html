@@ -98,13 +98,21 @@
             handleSubmit();
         });
 
-        fileInput.addEventListener('change', () => handleSubmit());
+        fileInput.addEventListener('change', handleSubmit);
 
         function handleSubmit() {
-            submitForm().catch(console.error);
-        }
-
-        async function submitForm() {
+            const formData = new FormData(form);
+            progress.style.display = 'flex';
+            progress.style.justifyContent = 'center';
+            progress.style.alignItems = 'center';
+            document.querySelector('.progress-filename').textContent = `Processing ${fileInput.files[0].name}...`;
+            
+            fetch('/convert', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(text => {
             const files = fileInput.files;
             if (!files.length) return;
 
