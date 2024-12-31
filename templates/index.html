@@ -3,6 +3,9 @@
 <head>
     <title>MarkItDown Converter</title>
     <link rel="stylesheet" href="/static/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -107,20 +110,41 @@
                     body: formData
                 });
 
-                const blob = await response.blob();
-                const filename = 'converted_files.zip';
+                const data = await response.json();
+                const files = data.files;
                 
-                const historyItem = document.createElement('div');
-                historyItem.className = 'history-item';
-                const downloadLink = document.createElement('a');
-                downloadLink.href = URL.createObjectURL(blob);
-                downloadLink.download = filename;
-                downloadLink.innerHTML = `<i class="fas fa-arrow-down"></i> ${filename}`;
-                downloadLink.style.display = 'flex';
-                downloadLink.style.alignItems = 'center';
-                downloadLink.style.gap = '0.5rem';
-                historyItem.appendChild(downloadLink);
-                historyList.insertBefore(historyItem, historyList.firstChild);
+                for (const file of files) {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    const downloadLink = document.createElement('a');
+                    const blob = new Blob([file.content], { type: 'text/markdown' });
+                    downloadLink.href = URL.createObjectURL(blob);
+                    downloadLink.download = file.filename;
+                    downloadLink.innerHTML = `<i class="fas fa-arrow-down"></i> ${file.filename}`;
+                    downloadLink.style.display = 'flex';
+                    downloadLink.style.alignItems = 'center';
+                    downloadLink.style.gap = '0.5rem';
+                    historyItem.appendChild(downloadLink);
+                    historyList.insertBefore(historyItem, historyList.firstChild);
+                }
+                
+                if (files.length > 1) {
+                    const zipButton = document.createElement('button');
+                    zipButton.innerHTML = 'Download as ZIP';
+                    zipButton.className = 'zip-button';
+                    zipButton.onclick = async () => {
+                        const zip = new JSZip();
+                        files.forEach(file => {
+                            zip.file(file.filename, file.content);
+                        });
+                        const blob = await zip.generateAsync({type: 'blob'});
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = 'converted_files.zip';
+                        link.click();
+                    };
+                    historyList.insertBefore(zipButton, historyList.firstChild);
+                }
                 document.getElementById('conversion-history').style.display = 'block';
             } catch (error) {
                 console.error('Error:', error);
