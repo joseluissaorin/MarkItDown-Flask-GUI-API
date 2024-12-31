@@ -27,7 +27,11 @@ def convert():
         try:
             for file in files:
                 temp_path = os.path.join(temp_dir, file.filename)
-                file.save(temp_path)
+                try:
+                    file.save(temp_path)
+                except (ValueError, IOError) as e:
+                    print(f"Error saving {file.filename}: {str(e)}")
+                    continue
                 
                 try:
                     result = md.convert(temp_path)
@@ -54,6 +58,10 @@ def convert():
             else:
                 yield jsonify({'error': 'No files were converted successfully'}).get_data(as_text=True)
         finally:
+            # Clean up all files in temp directory
+            for root, dirs, files in os.walk(temp_dir, topdown=False):
+                for name in files:
+                    os.remove(os.path.join(root, name))
             if os.path.exists(temp_dir):
                 os.rmdir(temp_dir)
                 
