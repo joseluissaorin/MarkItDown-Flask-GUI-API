@@ -48,15 +48,16 @@ def convert():
                     print(f"Error converting {file.filename}: {str(e)}")
                     continue
 
-            if results:
-                yield jsonify({
-                    'files': [{
-                        'content': open(r['path'], 'r').read(),
-                        'filename': r['filename']
-                    } for r in results]
-                }).get_data(as_text=True)
-            else:
-                yield jsonify({'error': 'No files were converted successfully'}).get_data(as_text=True)
+            with app.app_context():
+                if results:
+                    yield jsonify({
+                        'files': [{
+                            'content': open(r['path'], 'r').read(),
+                            'filename': r['filename']
+                        } for r in results]
+                    }).get_data(as_text=True)
+                else:
+                    yield jsonify({'error': 'No files were converted successfully'}).get_data(as_text=True)
         finally:
             # Clean up all files in temp directory
             for root, dirs, files in os.walk(temp_dir, topdown=False):
