@@ -108,7 +108,7 @@
             progress.style.display = 'flex';
             progress.style.justifyContent = 'center';
             progress.style.alignItems = 'center';
-            document.querySelector('.progress-filename').textContent = `Processing ${files[0].name}...`;
+            document.querySelector('.progress-filename').textContent = 'Processing...';
             
             try {
                 const response = await fetch('/convert', {
@@ -124,7 +124,7 @@
                     if (message.startsWith('data: ')) {
                         const data = JSON.parse(message.slice(6));
                         if (data.status === 'processing') {
-                            document.querySelector('.progress-filename').textContent = `Processing ${data.filename}...`;
+                            document.querySelector('.progress-filename').textContent = 'Processing...';
                         }
                     } else if (message.trim()) {
                         lastMessage = message;
