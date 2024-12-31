@@ -26,25 +26,34 @@ def convert():
     try:
         for file in files:
             # Save uploaded file temporarily
-    temp_dir = tempfile.mkdtemp()
-    temp_path = os.path.join(temp_dir, file.filename)
-    file.save(temp_path)
+            temp_path = os.path.join(temp_dir, file.filename)
+            file.save(temp_path)
 
-    try:
-        # Convert file to markdown
-        result = md.convert(temp_path)
-        
-        # Create temporary markdown file
-        output_path = os.path.join(temp_dir, 'output.md')
-        with open(output_path, 'w') as f:
-            f.write(result.text_content)
-        
-        return send_file(
-            output_path,
-            mimetype='text/markdown',
-            as_attachment=True,
-            download_name=f"{os.path.splitext(file.filename)[0]}-MarkItDown.md"
-        )
+            try:
+                # Convert file to markdown
+                result = md.convert(temp_path)
+                
+                # Create temporary markdown file
+                output_path = os.path.join(temp_dir, f"{os.path.splitext(file.filename)[0]}-MarkItDown.md")
+                with open(output_path, 'w') as f:
+                    f.write(result.text_content)
+                
+                results.append({
+                    'path': output_path,
+                    'filename': f"{os.path.splitext(file.filename)[0]}-MarkItDown.md"
+                })
+            except Exception as e:
+                return jsonify({'error': str(e)}), 500
+
+        # Return the first converted file for now
+        if results:
+            return send_file(
+                results[0]['path'],
+                mimetype='text/markdown',
+                as_attachment=True,
+                download_name=results[0]['filename']
+            )
+        return jsonify({'error': 'No files were converted successfully'}), 500
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     finally:
