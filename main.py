@@ -20,8 +20,9 @@ def convert():
     if not files or files[0].filename == '':
         return jsonify({'error': 'No file selected'}), 400
 
-    results = []
-    temp_dir = tempfile.mkdtemp()
+    def generate():
+        results = []
+        temp_dir = tempfile.mkdtemp()
     
     try:
         for file in files:
@@ -44,19 +45,16 @@ def convert():
                 continue
 
         if results:
-            return jsonify({
+            yield jsonify({
                 'files': [{
                     'content': open(r['path'], 'r').read(),
                     'filename': r['filename']
                 } for r in results]
-            })
-        return jsonify({'error': 'No files were converted successfully'}), 500
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-    finally:
-        # Cleanup
-        if os.path.exists(temp_path):
-            os.remove(temp_path)
+            }).get_data(as_text=True)
+        else:
+            yield jsonify({'error': 'No files were converted successfully'}).get_data(as_text=True)
+
+    return app.response_class(generate(), mimetype='application/json')
 
 @app.route('/api/convert', methods=['POST'])
 def api_convert():

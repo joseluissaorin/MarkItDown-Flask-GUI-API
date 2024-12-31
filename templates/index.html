@@ -151,7 +151,7 @@
                 
                 if (files.length > 1) {
                     const zipButton = document.createElement('button');
-                    zipButton.innerHTML = 'Download as ZIP';
+                    zipButton.innerHTML = '<strong>Download as ZIP</strong>';
                     zipButton.className = 'zip-button';
                     zipButton.onclick = async () => {
                         const zip = new JSZip();
