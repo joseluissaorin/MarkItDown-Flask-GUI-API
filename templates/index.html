@@ -87,56 +87,36 @@
             handleSubmit();
         });
 
-        fileInput.addEventListener('change', handleSubmit);
+        fileInput.addEventListener('change', () => handleSubmit());
 
         async function handleSubmit() {
             progress.style.display = 'block';
             const formData = new FormData(form);
-            const response = await fetch('/convert', {
-                method: 'POST',
-                body: formData
-            });
+            
+            try {
+                const response = await fetch('/convert', {
+                    method: 'POST',
+                    body: formData
+                });
 
-            const blob = await response.blob();
-            const filename = response.headers.get('Content-Disposition').split('filename=')[1].replace(/"/g, '');
-            
-            const historyItem = document.createElement('div');
-            historyItem.className = 'history-item';
-            const downloadLink = document.createElement('a');
-            downloadLink.href = URL.createObjectURL(blob);
-            downloadLink.download = filename;
-            downloadLink.textContent = filename;
-            historyItem.appendChild(downloadLink);
-            historyList.insertBefore(historyItem, historyList.firstChild);
-            document.getElementById('conversion-history').style.display = 'block';
-            
-            progress.style.display = 'none';
+                const blob = await response.blob();
+                const filename = response.headers.get('Content-Disposition').split('filename=')[1].replace(/"/g, '');
+                
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                const downloadLink = document.createElement('a');
+                downloadLink.href = URL.createObjectURL(blob);
+                downloadLink.download = filename;
+                downloadLink.textContent = filename;
+                historyItem.appendChild(downloadLink);
+                historyList.insertBefore(historyItem, historyList.firstChild);
+                document.getElementById('conversion-history').style.display = 'block';
+            } catch (error) {
+                console.error('Error:', error);
+            } finally {
+                progress.style.display = 'none';
+            }
         }
-            e.preventDefault();
-            progress.style.display = 'block';
-            
-            const formData = new FormData(form);
-            const response = await fetch('/convert', {
-                method: 'POST',
-                body: formData
-            });
-
-            const blob = await response.blob();
-            const filename = response.headers.get('Content-Disposition').split('filename=')[1].replace(/"/g, '');
-            
-            // Add to history
-            const historyItem = document.createElement('div');
-            historyItem.className = 'history-item';
-            const downloadLink = document.createElement('a');
-            downloadLink.href = URL.createObjectURL(blob);
-            downloadLink.download = filename;
-            downloadLink.textContent = filename;
-            historyItem.appendChild(downloadLink);
-            historyList.insertBefore(historyItem, historyList.firstChild);
-            document.getElementById('conversion-history').style.display = 'block';
-            
-            progress.style.display = 'none';
-        };
     </script>
 </body>
 </html>
