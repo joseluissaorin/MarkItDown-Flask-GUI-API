@@ -32,7 +32,7 @@ def convert():
         # Create temporary markdown file
         output_path = os.path.join(temp_dir, 'output.md')
         with open(output_path, 'w') as f:
-            f.write(result.markdown)
+            f.write(result.text_content)
         
         return send_file(
             output_path,
@@ -62,7 +62,7 @@ def api_convert():
 
     try:
         result = md.convert(temp_path)
-        return jsonify({'markdown': result.markdown})
+        return jsonify({'markdown': result.text_content})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     finally:
