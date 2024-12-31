@@ -25,17 +25,14 @@ def convert():
         temp_dir = tempfile.mkdtemp()
         
         try:
-            processed_files = []
             for file in files:
                 if not file.filename:
                     continue
-                processed_files.append((file.filename, file.read()))
+                    
+                temp_path = os.path.join(temp_dir, file.filename)
+                file.save(temp_path)
                 
-            for filename, content in processed_files:
-                temp_path = os.path.join(temp_dir, filename)
                 try:
-                    with open(temp_path, 'wb') as f:
-                        f.write(content)
                 except (ValueError, IOError) as e:
                     print(f"Error saving {filename}: {str(e)}")
                     continue
