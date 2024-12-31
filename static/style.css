@@ -165,6 +165,15 @@ button:hover {
   font-weight: 500;
 }
 
+.history-item a i {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.history-item:hover a i {
+  opacity: 1;
+}
+
 .progress {
   background: #eee;
   border-radius: 8px;

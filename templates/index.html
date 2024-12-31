@@ -107,7 +107,10 @@
                 const downloadLink = document.createElement('a');
                 downloadLink.href = URL.createObjectURL(blob);
                 downloadLink.download = filename;
-                downloadLink.textContent = filename;
+                downloadLink.innerHTML = `<i class="fas fa-download"></i> ${filename}`;
+                downloadLink.style.display = 'flex';
+                downloadLink.style.alignItems = 'center';
+                downloadLink.style.gap = '0.5rem';
                 historyItem.appendChild(downloadLink);
                 historyList.insertBefore(historyItem, historyList.firstChild);
                 document.getElementById('conversion-history').style.display = 'block';
