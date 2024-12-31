@@ -9,9 +9,13 @@
     <div class="container">
         <h1>MarkItDown Converter</h1>
         <div class="converter">
-            <form action="/convert" method="post" enctype="multipart/form-data">
+            <form id="convertForm" action="/convert" method="post" enctype="multipart/form-data">
                 <div class="upload-area">
                     <input type="file" id="file" name="file" required>
+                </div>
+                <div id="progress" class="progress" style="display: none;">
+                    <div class="progress-bar"></div>
+                    <div class="progress-text">Converting...</div>
                 </div>
                 <button type="submit">Convert to Markdown</button>
             </form>
@@ -30,6 +34,15 @@
                 <li>ZIP files</li>
             </ul>
         </div>
+        <footer>
+            <p>Powered by <a href="https://pypi.org/project/markitdown/">MarkItDown</a></p>
+            <p>Made by José Luis Saorín &copy; 2025</p>
+        </footer>
     </div>
+    <script>
+        document.getElementById('convertForm').onsubmit = function() {
+            document.getElementById('progress').style.display = 'block';
+        };
+    </script>
 </body>
 </html>

@@ -38,7 +38,7 @@ def convert():
             output_path,
             mimetype='text/markdown',
             as_attachment=True,
-            download_name='converted.md'
+            download_name=f"{os.path.splitext(file.filename)[0]}-MarkItDown.md"
         )
     except Exception as e:
         return jsonify({'error': str(e)}), 500
