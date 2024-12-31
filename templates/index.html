@@ -53,10 +53,10 @@
         </div>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     </div>
-    <footer>
+    <div class="footer">
         <p>Powered by <a href="https://github.com/microsoft/markitdown"><i class="fas fa-file-alt"></i> MarkItDown</a></p>
         <p>Made by José Luis Saorín <i class="fas fa-code"></i> &copy; 2025</p>
-    </footer>
+    </div>
     <script>
         const form = document.getElementById('convertForm');
         const progress = document.getElementById('progress');
@@ -112,7 +112,7 @@
                 const downloadLink = document.createElement('a');
                 downloadLink.href = URL.createObjectURL(blob);
                 downloadLink.download = filename;
-                downloadLink.innerHTML = `<i class="fas fa-cloud-download-alt"></i> ${filename}`;
+                downloadLink.innerHTML = `<i class="fas fa-arrow-down"></i> ${filename}`;
                 downloadLink.style.display = 'flex';
                 downloadLink.style.alignItems = 'center';
                 downloadLink.style.gap = '0.5rem';
