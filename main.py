@@ -28,7 +28,9 @@ def convert():
             for file in files:
                 temp_path = os.path.join(temp_dir, file.filename)
                 try:
-                    file.save(temp_path)
+                    with file.stream as stream:
+                        with open(temp_path, 'wb') as f:
+                            f.write(stream.read())
                 except (ValueError, IOError) as e:
                     print(f"Error saving {file.filename}: {str(e)}")
                     continue
