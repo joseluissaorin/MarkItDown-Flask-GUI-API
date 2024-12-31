@@ -20,9 +20,46 @@ def convert():
     if not files or files[0].filename == '':
         return jsonify({'error': 'No file selected'}), 400
 
-    def generate(files):
-        results = []
-        temp_dir = tempfile.mkdtemp()
+    results = []
+    temp_dir = tempfile.mkdtemp()
+    
+    try:
+        for file in files:
+            if not file.filename:
+                continue
+            temp_path = os.path.join(temp_dir, file.filename)
+            file.save(temp_path)
+            
+            try:
+                result = md.convert(temp_path)
+                output_path = os.path.join(temp_dir, f"{os.path.splitext(file.filename)[0]}-MarkItDown.md")
+                
+                with open(output_path, 'w') as f:
+                    f.write(result.text_content)
+                
+                with open(output_path, 'r') as f:
+                    content = f.read()
+                    
+                results.append({
+                    'filename': f"{os.path.splitext(file.filename)[0]}-MarkItDown.md",
+                    'content': content
+                })
+            except Exception as e:
+                print(f"Error converting {file.filename}: {str(e)}")
+                continue
+                
+        return jsonify({'files': results})
+    finally:
+        for root, dirs, files in os.walk(temp_dir, topdown=False):
+            for name in files:
+                try:
+                    os.remove(os.path.join(root, name))
+                except:
+                    pass
+        try:
+            os.rmdir(temp_dir)
+        except:
+            pass
         
         try:
             for file in files:
