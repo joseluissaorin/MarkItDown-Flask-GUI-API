@@ -4,7 +4,7 @@
   --primary-dark: #1976D2;
   --bg-light: #f8f9fa;
   --text: #2c3e50;
-  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow: 0 4px 15px rgba(33, 150, 243, 0.15);
 }
 
 * {
