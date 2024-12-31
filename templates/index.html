@@ -111,10 +111,19 @@
             
             const formData = new FormData(form);
             try {
+                const eventSource = new EventSource('/convert');
+                eventSource.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    if (data.status === 'processing') {
+                        document.querySelector('.progress-filename').textContent = `Processing ${data.filename}...`;
+                    }
+                };
+                
                 const response = await fetch('/convert', {
                     method: 'POST',
                     body: formData
                 });
+                eventSource.close();
 
                 const data = await response.json();
                 const files = data.files;

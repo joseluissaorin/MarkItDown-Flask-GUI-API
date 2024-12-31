@@ -29,6 +29,8 @@ def convert():
             file.save(temp_path)
             
             try:
+                # Return processing status
+                yield f"data: {{'status': 'processing', 'filename': '{file.filename}'}}\n\n"
                 result = md.convert(temp_path)
                 output_path = os.path.join(temp_dir, f"{os.path.splitext(file.filename)[0]}-MarkItDown.md")
                 
