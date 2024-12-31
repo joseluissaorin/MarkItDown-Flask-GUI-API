@@ -16,11 +16,16 @@ def convert():
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400
     
-    file = request.files['file']
-    if file.filename == '':
+    files = request.files.getlist('file')
+    if not files or files[0].filename == '':
         return jsonify({'error': 'No file selected'}), 400
 
-    # Save uploaded file temporarily
+    results = []
+    temp_dir = tempfile.mkdtemp()
+
+    try:
+        for file in files:
+            # Save uploaded file temporarily
     temp_dir = tempfile.mkdtemp()
     temp_path = os.path.join(temp_dir, file.filename)
     file.save(temp_path)

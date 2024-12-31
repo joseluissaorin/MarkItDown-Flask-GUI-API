@@ -95,6 +95,31 @@ button:hover {
     color: #4CAF50;
 }
 
+.conversion-history {
+    margin-top: 30px;
+    background: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.history-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.history-item:last-child {
+    border-bottom: none;
+}
+
+.history-item a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.history-item a:hover {
+    text-decoration: underline;
+}
+
 footer {
     margin-top: 40px;
     text-align: center;

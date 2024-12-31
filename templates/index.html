@@ -11,7 +11,7 @@
         <div class="converter">
             <form id="convertForm" action="/convert" method="post" enctype="multipart/form-data">
                 <div class="upload-area">
-                    <input type="file" id="file" name="file" required>
+                    <input type="file" id="file" name="file" required multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.html,.htm,.txt,.csv,.json,.xml,.zip,.jpg,.jpeg,.png,.gif,.mp3,.wav">
                 </div>
                 <div id="progress" class="progress" style="display: none;">
                     <div class="progress-bar"></div>
@@ -34,14 +34,44 @@
                 <li>ZIP files</li>
             </ul>
         </div>
+        <div class="conversion-history">
+            <h2>Recent Conversions</h2>
+            <div id="history-list"></div>
+        </div>
         <footer>
             <p>Powered by <a href="https://pypi.org/project/markitdown/">MarkItDown</a></p>
             <p>Made by José Luis Saorín &copy; 2025</p>
         </footer>
     </div>
     <script>
-        document.getElementById('convertForm').onsubmit = function() {
-            document.getElementById('progress').style.display = 'block';
+        const form = document.getElementById('convertForm');
+        const progress = document.getElementById('progress');
+        const historyList = document.getElementById('history-list');
+
+        form.onsubmit = async function(e) {
+            e.preventDefault();
+            progress.style.display = 'block';
+            
+            const formData = new FormData(form);
+            const response = await fetch('/convert', {
+                method: 'POST',
+                body: formData
+            });
+
+            const blob = await response.blob();
+            const filename = response.headers.get('Content-Disposition').split('filename=')[1].replace(/"/g, '');
+            
+            // Add to history
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            const downloadLink = document.createElement('a');
+            downloadLink.href = URL.createObjectURL(blob);
+            downloadLink.download = filename;
+            downloadLink.textContent = filename;
+            historyItem.appendChild(downloadLink);
+            historyList.insertBefore(historyItem, historyList.firstChild);
+            
+            progress.style.display = 'none';
         };
     </script>
 </body>
