@@ -175,20 +175,37 @@ button:hover {
 }
 
 .progress {
-  background: #eee;
-  border-radius: 8px;
-  height: 8px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   margin: 1rem 0;
-  overflow: hidden;
-  display: none;
+  padding: 1rem;
+  background: rgba(33, 150, 243, 0.05);
+  border-radius: 8px;
 }
 
-.progress-bar {
-  height: 100%;
-  background: var(--primary);
-  animation: progress 1s infinite linear;
-  background-size: 30px 30px;
-  background-image: linear-gradient(
+.progress-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--primary);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spinner 0.8s linear infinite;
+}
+
+@keyframes spinner {
+  to {transform: rotate(360deg);}
+}
+
+.progress-text {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.progress-filename {
+  color: var(--text);
+  font-weight: 400;
+}
     45deg,
     rgba(255, 255, 255, .15) 25%,
     transparent 25%,

@@ -23,10 +23,15 @@
                     </div>
                 </div>
                 <div id="progress" class="progress" style="display: none;">
-                    <div class="progress-bar"></div>
-                    <div class="progress-text">Converting...</div>
+                    <div class="progress-spinner"></div>
+                    <div class="progress-text">Processing...</div>
+                    <div class="progress-filename"></div>
                 </div>
             </form>
+        </div>
+        <div class="conversion-history" style="display: none;" id="conversion-history">
+            <h2>Recent Conversions</h2>
+            <div id="history-list"></div>
         </div>
         <div class="supported-formats">
             <h2>Supported Formats</h2>
@@ -107,7 +112,7 @@
                 const downloadLink = document.createElement('a');
                 downloadLink.href = URL.createObjectURL(blob);
                 downloadLink.download = filename;
-                downloadLink.innerHTML = `<i class="fas fa-download"></i> ${filename}`;
+                downloadLink.innerHTML = `<i class="fas fa-cloud-download-alt"></i> ${filename}`;
                 downloadLink.style.display = 'flex';
                 downloadLink.style.alignItems = 'center';
                 downloadLink.style.gap = '0.5rem';

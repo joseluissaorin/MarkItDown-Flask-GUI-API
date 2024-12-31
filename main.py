@@ -22,19 +22,16 @@ def convert():
 
     results = []
     temp_dir = tempfile.mkdtemp()
-
+    
     try:
         for file in files:
-            # Save uploaded file temporarily
             temp_path = os.path.join(temp_dir, file.filename)
             file.save(temp_path)
-
+            
             try:
-                # Convert file to markdown
                 result = md.convert(temp_path)
-                
-                # Create temporary markdown file
                 output_path = os.path.join(temp_dir, f"{os.path.splitext(file.filename)[0]}-MarkItDown.md")
+                
                 with open(output_path, 'w') as f:
                     f.write(result.text_content)
                 
@@ -43,7 +40,8 @@ def convert():
                     'filename': f"{os.path.splitext(file.filename)[0]}-MarkItDown.md"
                 })
             except Exception as e:
-                return jsonify({'error': str(e)}), 500
+                print(f"Error converting {file.filename}: {str(e)}")
+                continue
 
         # Return the first converted file for now
         if results:
