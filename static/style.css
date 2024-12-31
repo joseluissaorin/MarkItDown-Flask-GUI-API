@@ -1,7 +1,7 @@
 
 :root {
-  --primary: #4CAF50;
-  --primary-dark: #45a049;
+  --primary: #2196F3;
+  --primary-dark: #1976D2;
   --bg-light: #f8f9fa;
   --text: #2c3e50;
   --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -44,15 +44,39 @@ h1 {
 .upload-area {
   border: 2px dashed var(--primary);
   border-radius: 8px;
-  padding: 2rem;
+  padding: 3rem;
   text-align: center;
   margin-bottom: 1.5rem;
   transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
 }
 
 .upload-area:hover {
   border-color: var(--primary-dark);
-  background: rgba(76, 175, 80, 0.05);
+  background: rgba(33, 150, 243, 0.05);
+}
+
+.upload-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  color: var(--primary);
+}
+
+.upload-message svg {
+  stroke: var(--primary);
+}
+
+.upload-message p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.upload-area.drag-over {
+  background: rgba(33, 150, 243, 0.1);
+  border-color: var(--primary-dark);
 }
 
 button {

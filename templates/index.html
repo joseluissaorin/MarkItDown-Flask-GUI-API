@@ -11,14 +11,21 @@
         <h1>MarkItDown Converter</h1>
         <div class="converter">
             <form id="convertForm" action="/convert" method="post" enctype="multipart/form-data">
-                <div class="upload-area">
-                    <input type="file" id="file" name="file" required multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.html,.htm,.txt,.csv,.json,.xml,.zip,.jpg,.jpeg,.png,.gif,.mp3,.wav">
+                <div class="upload-area" id="dropZone">
+                    <input type="file" id="file" name="file" required multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.html,.htm,.txt,.csv,.json,.xml,.zip,.jpg,.jpeg,.png,.gif,.mp3,.wav" style="display: none;">
+                    <div class="upload-message">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <p>Drag and drop files here<br>or click to select files</p>
+                    </div>
                 </div>
                 <div id="progress" class="progress" style="display: none;">
                     <div class="progress-bar"></div>
                     <div class="progress-text">Converting...</div>
                 </div>
-                <button type="submit">Convert to Markdown</button>
             </form>
         </div>
         <div class="supported-formats">
@@ -48,8 +55,61 @@
         const form = document.getElementById('convertForm');
         const progress = document.getElementById('progress');
         const historyList = document.getElementById('history-list');
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('file');
 
-        form.onsubmit = async function(e) {
+        dropZone.addEventListener('click', () => fileInput.click());
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.add('drag-over');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.remove('drag-over');
+            });
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            fileInput.files = e.dataTransfer.files;
+            handleSubmit();
+        });
+
+        fileInput.addEventListener('change', handleSubmit);
+
+        async function handleSubmit() {
+            progress.style.display = 'block';
+            const formData = new FormData(form);
+            const response = await fetch('/convert', {
+                method: 'POST',
+                body: formData
+            });
+
+            const blob = await response.blob();
+            const filename = response.headers.get('Content-Disposition').split('filename=')[1].replace(/"/g, '');
+            
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            const downloadLink = document.createElement('a');
+            downloadLink.href = URL.createObjectURL(blob);
+            downloadLink.download = filename;
+            downloadLink.textContent = filename;
+            historyItem.appendChild(downloadLink);
+            historyList.insertBefore(historyItem, historyList.firstChild);
+            
+            progress.style.display = 'none';
+        }
             e.preventDefault();
             progress.style.display = 'block';
             
