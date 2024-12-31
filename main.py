@@ -32,7 +32,7 @@ def convert():
         # Create temporary markdown file
         output_path = os.path.join(temp_dir, 'output.md')
         with open(output_path, 'w') as f:
-            f.write(result)
+            f.write(str(result))
         
         return send_file(
             output_path,
