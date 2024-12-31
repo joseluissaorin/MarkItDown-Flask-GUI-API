@@ -1,93 +1,71 @@
-# Python Flask ReplAuth
 
-Using the ReplAuth with Flask is super easy! First we create a new Flask app: 
+# MarkItDown Converter
 
-<details>
-  <summary>Import Flask and create new Flask app</summary>
+A web-based tool that converts various file formats to Markdown, powered by Microsoft's MarkItDown library.
 
-```python
-from flask import Flask, render_template, request
-app = Flask('app')
-@app.route('/')
+## Features
+
+- Drag-and-drop file upload
+- Multiple file conversion support
+- Bulk download as ZIP
+- Progress tracking
+- Conversion history
+- Clean, modern UI
+
+## Supported Formats
+
+- PDF
+- Microsoft Office (Word, PowerPoint, Excel)
+- Images (EXIF + OCR support)
+- Audio (EXIF + transcription)
+- HTML
+- Text formats (CSV, JSON, XML)
+- ZIP files
+
+## Getting Started
+
+1. Clone this repository
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
 ```
-</details>
-
-And then we request the headers: 
-
-<details>
-  <summary>Requested Headers:</summary>
-
-```python
-def hello_world():
-    print(request.headers)
-    return render_template(
-        'index.html',
-        user_id=request.headers['X-Replit-User-Id'],
-        user_name=request.headers['X-Replit-User-Name'],
-        user_roles=request.headers['X-Replit-User-Roles'],
-        user_bio=request.headers['X-Replit-User-Bio'],
-        user_profile_image=request.headers['X-Replit-User-Profile-Image'],
-        user_teams=request.headers['X-Replit-User-Teams'],
-        user_url=request.headers['X-Replit-User-Url']
-    )
-```
-</details>
-
-In this code we've requested all the possible headers, which are these:
-
-<details>
-  <summary>All Replit Headers</summary>
-
-```python
-X-Replit-User-Bio
-X-Replit-User-Id
-X-Replit-User-Name
-X-Replit-User-Profile-Image
-X-Replit-User-Roles
-X-Replit-User-Teams
-X-Replit-User-Url
-```
-</details>
-
-Once we've requested all these headers, we can show the information we've got after the user has passed through the Auth. This info will be displayed on the console, but can also be displayed in a html file.
-
-We can show this by displaying the variable assigned to a header in a HTML tag (it can also be shown without a tag). If we wanted to show the username of the user we would put this:
-
-```html
-<h1>{{ user_name }}</h1>
+3. Run the application:
+```bash
+python main.py
 ```
 
-And the output will be a heading (h1) with the username. 
+The server will start on port 8080.
 
-# ReplAuth FAQ 
+## Usage
 
-The question is in a quote and in italic and the answer is in a bullet point.
+1. Open your browser and navigate to the application
+2. Drag and drop files or click to select files
+3. Wait for the conversion to complete
+4. Download individual files or get all as ZIP
+5. View conversion history below the upload area
 
-<details>
-  <summary>ReplAuth FAQ</summary>
-  
-  > *How many ReplAuths are there?*
-  
-  - There are 2 repl auths!
- ---
-  > *Which ReplAuths are there?*
-  
-  - Node.js and Python Flask
----
-  > *Is there a Replit Documentation on ReplAuths?*
+## Tech Stack
 
-  - Yes! You can find it in the [Replit Docs](https://docs.replit.com)
-</details>
+- Python Flask
+- Microsoft MarkItDown
+- JavaScript (Frontend)
+- CSS3 with modern animations
+- JSZip for bulk downloads
 
-# Template
+## API Endpoints
 
-**Name**: Python Flask ReplAuth
+- `POST /convert` - Convert multiple files
+- `POST /api/convert` - Convert single file (API usage)
 
-**Description**: Python Flask ReplAuth is easy and useful to use! What are you waiting for? Start using ReplAuth today!
+## Development
 
-# Questions?
+This project is developed on Replit, making it easy to fork and customize. Visit our Replit project to start contributing.
 
-If you have any question please look at our support resources:
+## Credits
 
-- [Replit Docs](https://docs.replit.com)
-- [Ask forum](https://ask.replit.com)
+- Powered by [Microsoft MarkItDown](https://github.com/microsoft/markitdown)
+- Created by José Luis Saorín
+
+## License
+
+MIT License
