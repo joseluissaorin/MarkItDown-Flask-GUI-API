@@ -70,7 +70,7 @@ def convert():
                     os.remove(os.path.join(root, name))
             if os.path.exists(temp_dir):
                 os.rmdir(temp_dir)
-                
+
     return app.response_class(generate(files), mimetype='application/json')
 
 @app.route('/api/convert', methods=['POST'])
