@@ -221,12 +221,17 @@ button:hover {
   background: white;
   border-top: 1px solid var(--primary);
   padding: 1rem 0;
-  text-align: center;
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
   box-shadow: 0 -4px 6px -1px rgba(33, 150, 243, 0.1);
+}
+
+.footer-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .footer p {
@@ -238,9 +243,6 @@ button:hover {
   color: var(--primary);
   text-decoration: none;
   transition: color 0.2s;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 .footer a:hover {
