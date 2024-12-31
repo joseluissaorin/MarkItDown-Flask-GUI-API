@@ -23,37 +23,40 @@ def convert():
     def generate():
         results = []
         temp_dir = tempfile.mkdtemp()
-    
-    try:
-        for file in files:
-            temp_path = os.path.join(temp_dir, file.filename)
-            file.save(temp_path)
-            
-            try:
-                result = md.convert(temp_path)
-                output_path = os.path.join(temp_dir, f"{os.path.splitext(file.filename)[0]}-MarkItDown.md")
+        
+        try:
+            for file in files:
+                temp_path = os.path.join(temp_dir, file.filename)
+                file.save(temp_path)
                 
-                with open(output_path, 'w') as f:
-                    f.write(result.text_content)
+                try:
+                    result = md.convert(temp_path)
+                    output_path = os.path.join(temp_dir, f"{os.path.splitext(file.filename)[0]}-MarkItDown.md")
+                    
+                    with open(output_path, 'w') as f:
+                        f.write(result.text_content)
+                    
+                    results.append({
+                        'path': output_path,
+                        'filename': f"{os.path.splitext(file.filename)[0]}-MarkItDown.md"
+                    })
+                except Exception as e:
+                    print(f"Error converting {file.filename}: {str(e)}")
+                    continue
+
+            if results:
+                yield jsonify({
+                    'files': [{
+                        'content': open(r['path'], 'r').read(),
+                        'filename': r['filename']
+                    } for r in results]
+                }).get_data(as_text=True)
+            else:
+                yield jsonify({'error': 'No files were converted successfully'}).get_data(as_text=True)
+        finally:
+            if os.path.exists(temp_dir):
+                os.rmdir(temp_dir)
                 
-                results.append({
-                    'path': output_path,
-                    'filename': f"{os.path.splitext(file.filename)[0]}-MarkItDown.md"
-                })
-            except Exception as e:
-                print(f"Error converting {file.filename}: {str(e)}")
-                continue
-
-        if results:
-            yield jsonify({
-                'files': [{
-                    'content': open(r['path'], 'r').read(),
-                    'filename': r['filename']
-                } for r in results]
-            }).get_data(as_text=True)
-        else:
-            yield jsonify({'error': 'No files were converted successfully'}).get_data(as_text=True)
-
     return app.response_class(generate(), mimetype='application/json')
 
 @app.route('/api/convert', methods=['POST'])
