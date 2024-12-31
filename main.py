@@ -30,11 +30,11 @@ def convert():
                     continue
                     
                 temp_path = os.path.join(temp_dir, file.filename)
-                file.save(temp_path)
                 
                 try:
+                    file.save(temp_path)
                 except (ValueError, IOError) as e:
-                    print(f"Error saving {filename}: {str(e)}")
+                    print(f"Error saving {file.filename}: {str(e)}")
                     continue
                 
                 try:
