@@ -1,11 +1,11 @@
 
 from flask import Flask, render_template, request, jsonify, send_file
-from markitdown import MarkItDown
+from docling.document_converter import DocumentConverter
 import os
 import tempfile
 
 app = Flask('app')
-md = MarkItDown()
+converter = DocumentConverter()
 
 @app.route('/')
 def index():
@@ -31,11 +31,11 @@ def convert():
             file.save(temp_path)
             
             try:
-                result = md.convert(temp_path)
+                result = converter.convert(temp_path)
                 output_path = os.path.join(temp_dir, f"{os.path.splitext(file.filename)[0]}-MarkItDown.md")
-                
+
                 with open(output_path, 'w') as f:
-                    f.write(result.text_content)
+                    f.write(result.document.export_to_markdown())
                 
                 with open(output_path, 'r') as f:
                     content = f.read()
@@ -77,8 +77,8 @@ def api_convert():
     file.save(temp_path)
 
     try:
-        result = md.convert(temp_path)
-        return jsonify({'markdown': result.text_content})
+        result = converter.convert(temp_path)
+        return jsonify({'markdown': result.document.export_to_markdown()})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     finally:
