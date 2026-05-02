@@ -172,6 +172,10 @@ button:hover {
 }
 
 .history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   padding: 1rem;
   border-bottom: 1px solid #eee;
   transition: all 0.3s ease;
@@ -182,9 +186,43 @@ button:hover {
 }
 
 .history-item a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   color: var(--primary);
   text-decoration: none;
   font-weight: 500;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.copy-button {
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  width: auto;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.copy-button:hover {
+  background: var(--primary);
+  color: white;
+  transform: none;
+}
+
+.copy-button.copied {
+  background: #4caf50;
+  color: white;
+  border-color: #4caf50;
 }
 
 .history-item a i {

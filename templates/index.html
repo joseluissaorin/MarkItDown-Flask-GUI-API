@@ -15,7 +15,7 @@
         <div class="converter">
             <form id="convertForm" action="/convert" method="post" enctype="multipart/form-data">
                 <div class="upload-area" id="dropZone">
-                    <input type="file" id="file" name="file" required multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.html,.htm,.txt,.csv,.json,.xml,.zip,.jpg,.jpeg,.png,.gif,.mp3,.wav" style="display: none;">
+                    <input type="file" id="file" name="file" required multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.html,.htm,.txt,.csv,.json,.xml,.md,.jpg,.jpeg,.png,.gif,.mp3,.wav,.flac,.m4a,.ogg,.opus,.aac,.webm" style="display: none;">
                     <div class="upload-message">
                         <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -42,15 +42,12 @@
         <div class="supported-formats">
             <h2>Supported Formats</h2>
             <ul>
-                <li>PDF</li>
-                <li>PowerPoint</li>
-                <li>Word</li>
-                <li>Excel</li>
-                <li>Images (EXIF + OCR)</li>
-                <li>Audio (EXIF + transcription)</li>
+                <li>PDF (via Docling)</li>
+                <li>Word, PowerPoint, Excel</li>
+                <li>Images (with OCR)</li>
+                <li>Audio (Parakeet TDT transcription)</li>
                 <li>HTML</li>
-                <li>Text formats (CSV, JSON, XML)</li>
-                <li>ZIP files</li>
+                <li>Text formats (CSV, JSON, XML, Markdown)</li>
             </ul>
         </div>
         <div class="conversion-history" style="display: none;" id="conversion-history">
@@ -137,15 +134,34 @@
                 for (const file of files) {
                     const historyItem = document.createElement('div');
                     historyItem.className = 'history-item';
+
                     const downloadLink = document.createElement('a');
                     const blob = new Blob([file.content], { type: 'text/markdown' });
                     downloadLink.href = URL.createObjectURL(blob);
                     downloadLink.download = file.filename;
                     downloadLink.innerHTML = `<i class="fas fa-arrow-down"></i> ${file.filename}`;
-                    downloadLink.style.display = 'flex';
-                    downloadLink.style.alignItems = 'center';
-                    downloadLink.style.gap = '0.5rem';
+
+                    const copyBtn = document.createElement('button');
+                    copyBtn.type = 'button';
+                    copyBtn.className = 'copy-button';
+                    copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                    copyBtn.addEventListener('click', async () => {
+                        const original = copyBtn.innerHTML;
+                        try {
+                            await navigator.clipboard.writeText(file.content);
+                            copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied';
+                            copyBtn.classList.add('copied');
+                        } catch (e) {
+                            copyBtn.innerHTML = '<i class="fas fa-times"></i> Failed';
+                        }
+                        setTimeout(() => {
+                            copyBtn.innerHTML = original;
+                            copyBtn.classList.remove('copied');
+                        }, 1500);
+                    });
+
                     historyItem.appendChild(downloadLink);
+                    historyItem.appendChild(copyBtn);
                     historyList.insertBefore(historyItem, historyList.firstChild);
                 }
                 
