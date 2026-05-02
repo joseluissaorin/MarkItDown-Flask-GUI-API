@@ -173,16 +173,21 @@ button:hover {
 
 .history-item {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  flex-direction: column;
   padding: 1rem;
   border-bottom: 1px solid #eee;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease;
 }
 
 .history-item:hover {
   background: rgba(76, 175, 80, 0.05);
+}
+
+.history-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .history-item a {
@@ -196,6 +201,14 @@ button:hover {
   overflow-wrap: anywhere;
 }
 
+.history-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.view-button,
 .copy-button {
   background: transparent;
   color: var(--primary);
@@ -206,13 +219,13 @@ button:hover {
   font-weight: 500;
   cursor: pointer;
   width: auto;
-  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
+.view-button:hover,
 .copy-button:hover {
   background: var(--primary);
   color: white;
@@ -223,6 +236,34 @@ button:hover {
   background: #4caf50;
   color: white;
   border-color: #4caf50;
+}
+
+.history-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, margin-top 0.3s ease;
+}
+
+.history-item.expanded .history-content {
+  max-height: 60vh;
+  margin-top: 1rem;
+  overflow: auto;
+}
+
+.markdown-raw {
+  margin: 0;
+  padding: 1rem;
+  background: #f5f7fa;
+  border: 1px solid #e3e8ee;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--text);
+  max-height: calc(60vh - 2rem);
+  overflow: auto;
 }
 
 .history-item a i {

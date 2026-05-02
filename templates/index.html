@@ -135,11 +135,23 @@
                     const historyItem = document.createElement('div');
                     historyItem.className = 'history-item';
 
+                    const header = document.createElement('div');
+                    header.className = 'history-item-header';
+
                     const downloadLink = document.createElement('a');
                     const blob = new Blob([file.content], { type: 'text/markdown' });
                     downloadLink.href = URL.createObjectURL(blob);
                     downloadLink.download = file.filename;
                     downloadLink.innerHTML = `<i class="fas fa-arrow-down"></i> ${file.filename}`;
+
+                    const actions = document.createElement('div');
+                    actions.className = 'history-actions';
+
+                    const viewBtn = document.createElement('button');
+                    viewBtn.type = 'button';
+                    viewBtn.className = 'view-button';
+                    viewBtn.setAttribute('aria-expanded', 'false');
+                    viewBtn.innerHTML = '<i class="fas fa-eye"></i> View';
 
                     const copyBtn = document.createElement('button');
                     copyBtn.type = 'button';
@@ -160,8 +172,28 @@
                         }, 1500);
                     });
 
-                    historyItem.appendChild(downloadLink);
-                    historyItem.appendChild(copyBtn);
+                    actions.appendChild(viewBtn);
+                    actions.appendChild(copyBtn);
+                    header.appendChild(downloadLink);
+                    header.appendChild(actions);
+
+                    const content = document.createElement('div');
+                    content.className = 'history-content';
+                    const pre = document.createElement('pre');
+                    pre.className = 'markdown-raw';
+                    pre.textContent = file.content;
+                    content.appendChild(pre);
+
+                    viewBtn.addEventListener('click', () => {
+                        const open = historyItem.classList.toggle('expanded');
+                        viewBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+                        viewBtn.innerHTML = open
+                            ? '<i class="fas fa-eye-slash"></i> Hide'
+                            : '<i class="fas fa-eye"></i> View';
+                    });
+
+                    historyItem.appendChild(header);
+                    historyItem.appendChild(content);
                     historyList.insertBefore(historyItem, historyList.firstChild);
                 }
                 
